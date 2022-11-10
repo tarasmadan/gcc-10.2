@@ -1,0 +1,11 @@
+--- /var/tmp/tarasmadan/gcc-10.2.0_source/gcc-10.2.0/libstdc++-v3/po/Makefile.am	2022-11-09 16:39:31.585109009 +0100
++++ /var/tmp/tarasmadan/gcc-10.2.0_source/gcc-10.2.0/libstdc++-v3/po/Makefile.am.new	2022-11-09 16:39:16.088964787 +0100
+@@ -37,7 +37,9 @@
+ EXTRA_DIST = string_literals.cc POTFILES.in $(PACKAGE).pot $(LOCALE_IN)
+ 
++unexport LD_LIBRARY_PATH
+ .po.mo:
++	echo $(LD_LIBRARY_PATH)	
+ 	$(MSGFMT) -o $@ $<
+ 
+ all-local: all-local-$(USE_NLS)

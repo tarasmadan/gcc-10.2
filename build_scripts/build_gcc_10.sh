@@ -11,12 +11,12 @@
 #======================================================================
 
 # Provide the version of gcc being built (e.g. 9.1.0)
-gcc_version=10.1.0
+gcc_version=10.2.0
 
 # Additional makefile options.  E.g., "-j 4" for parallel builds.  Parallel
 # builds are faster, however it can cause a build to fail if the project
 # makefile does not support parallel build.
-#make_flags="-j 2"
+make_flags="-j 100"
 
 # Architecture we are building for.
 arch_flags="-march=x86-64"
@@ -30,14 +30,15 @@ build_target=x86_64-unknown-linux-gnu
 #
 # WARNING: do not make 'source_dir' and 'build_dir' the same, or
 # subdirectory of each other! It will cause build problems.
-install_dir=${HOME}/opt/gcc-${gcc_version}
-build_dir=/var/tmp/$(whoami)/gcc-${gcc_version}_build
-source_dir=/var/tmp/$(whoami)/gcc-${gcc_version}_source
-tarfile_dir=/var/tmp/$(whoami)/gcc-${gcc_version}_taballs
+#install_dir=${HOME}/opt/gcc-${gcc_version}
+install_dir=/syzkaller/gcc-${gcc_version}
+build_dir=/var/tmp/gcc/gcc-${gcc_version}_build
+source_dir=/var/tmp/gcc/gcc-${gcc_version}_source
+tarfile_dir=/var/tmp/gcc/gcc-${gcc_version}_taballs
 
 # String which gets embedded into gcc version info, can be accessed at
 # runtime. Use to indicate who/what/when has built this compiler.
-packageversion="$(whoami)-$(hostname -s)"
+# packageversion="$(whoami)-$(hostname -s)"
 
 # gcc requires that various tools and packages be available for use in the build
 # procedure, including several support libraries are necessary to build gcc. The
@@ -208,6 +209,8 @@ mv -v $source_dir/gcc-${gcc_version}/gmp-${gmp_version} $source_dir/gcc-${gcc_ve
 __untar "$source_dir/gcc-${gcc_version}"  "$tarfile_dir/$isl_tarfile"
 mv -v $source_dir/gcc-${gcc_version}/isl-${isl_version} $source_dir/gcc-${gcc_version}/isl
 
+patch /var/tmp/gcc/gcc-10.2.0_source/gcc-10.2.0/libstdc++-v3/po/Makefile.am < m.patch
+patch /var/tmp/gcc/gcc-10.2.0_source/gcc-10.2.0/libstdc++-v3/po/Makefile.in < n.patch
 
 #======================================================================
 # Clean environment
@@ -270,7 +273,6 @@ CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
     --disable-initfini-array \
     --disable-libgcj \
     --enable-plugin  \
-    --disable-multilib \
     --with-tune=generic \
     --build=${build_target} \
     --target=${build_target} \

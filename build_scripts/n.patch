@@ -1,0 +1,11 @@
+--- /var/tmp/tarasmadan/gcc-10.2.0_source/gcc-10.2.0/libstdc++-v3/po/Makefile.in	2022-11-09 16:39:02.032833794 +0100
++++ /var/tmp/tarasmadan/gcc-10.2.0_source/gcc-10.2.0/libstdc++-v3/po/Makefile.in.new	2022-11-09 16:38:46.732691012 +0100
+@@ -547,7 +547,9 @@
+ 
+ 
++unexport LD_LIBRARY_PATH
+ .po.mo:
++	echo $(LD_LIBRARY_PATH)
+ 	$(MSGFMT) -o $@ $<
+ 
+ all-local: all-local-$(USE_NLS)
